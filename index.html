@@ -13,6 +13,11 @@
 
         <label for="base">Select Color</label>
         <input id="base" type="color" name="base" value="#ffc600">
+
+        <label class="switch">randomise</label>
+        <input id="checkbox" type="checkbox">
+
+
     </div>
     <canvas id="draw" width="800" height="800"></canvas>
 
@@ -39,6 +44,9 @@
         const canvas = document.getElementById('draw');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        const randomLine = document.querySelector('#checkbox');
+        const lineSize = document.querySelector('#sizing');
+        const lineColor = document.querySelector('#base');
 
         const ctx = canvas.getContext('2d');
         ctx.lineJoin = 'round';
@@ -50,22 +58,28 @@
         position.forEach(input => input.addEventListener('mousemove', visualUpdate));
 
 
+
         function visualUpdate() {
-            ctx.strokeStyle = (`--${this.name}`, this.value);
-            ctx.lineWidth = (`--${this.name}`, this.value);
+            ctx.strokeStyle = this.value;
+            ctx.lineWidth = this.value;
         }
 
-
-        // &&&&& commented code for the task without additional munu
-        // let color = 50;
-        //let line = 20;
-        // let lineGrow = true;
+        let color = 50;
+        let line = 20;
+        let lineGrow = true;
 
         let isDrawing = false;
         let lastX;
         let lastY;
 
-        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mousemove', function () {
+            if (!randomLine.checked && isDrawing) {
+                drawingByRules();
+            } else if (randomLine.checked && isDrawing) {
+                drawingRandom();
+            }
+        });
+
         canvas.addEventListener('mousedown', () => {
             isDrawing = true;
             [lastX, lastY] = [event.offsetX, event.offsetY];
@@ -74,34 +88,35 @@
         canvas.addEventListener('mouseout', () => isDrawing = false);
 
 
-        function draw(event) {
+        function drawingByRules() {
+            visualUpdate()
             if (!isDrawing) {
                 return;
             } else {
-                ctx.strokeStyle;
-                ctx.lineWidth;
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(event.offsetX, event.offsetY);
-                ctx.stroke();
-                [lastX, lastY] = [event.offsetX, event.offsetY];
+                ctx.strokeStyle = lineColor.value;
+                ctx.lineWidth = lineSize.value;
+                makeLine();
             }
-
-            // &&&&& commented code for the task without additional munu
-            // color++;
-            // if (color >= 360) {
-            //     color = 0;
-            // }
-            // if (line > 80 || line < 1) {
-            //     lineGrow = !lineGrow;
-            // }
-
-            // if (lineGrow) {
-            //     line++;
-            // } else {
-            //     line--;
-            // }
         }
+
+        function drawingRandom() {
+            ctx.strokeStyle = `hsl(${color}, 100%, 50%)`;
+            ctx.lineWidth = line;
+
+            makeLine();
+            color = (color >= 360) ? 0 : ++color;
+            lineGrow = (line > 80 || line < 1) ? !lineGrow : lineGrow;
+            line += lineGrow ? 1 : -1;
+        }
+
+        function makeLine() {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+            [lastX, lastY] = [event.offsetX, event.offsetY];
+        }
+
     </script>
 
 
