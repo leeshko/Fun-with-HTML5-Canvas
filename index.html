@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Canvas</title>
+</head>
+
+<body>
+    <div class="controls">
+        <label for="sizing">Line Width:</label>
+        <input id="sizing" type="range" name="sizing" min="1" max="100" value="1">
+
+        <label for="base">Select Color</label>
+        <input id="base" type="color" name="base" value="#ffc600">
+    </div>
+    <canvas id="draw" width="800" height="800"></canvas>
+
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        :root {
+            --base: red;
+            --sizing: 0;
+        }
+
+        .controls {
+            text-align: center;
+            font-size: 20px;
+        }
+    </style>
+
+
+    <script>
+        const canvas = document.getElementById('draw');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const ctx = canvas.getContext('2d');
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = "#ffc600";
+
+        const position = document.querySelectorAll('.controls input');
+        position.forEach(input => input.addEventListener('change', visualUpdate));
+        position.forEach(input => input.addEventListener('mousemove', visualUpdate));
+
+
+        function visualUpdate() {
+            ctx.strokeStyle = (`--${this.name}`, this.value);
+            ctx.lineWidth = (`--${this.name}`, this.value);
+        }
+
+
+        // &&&&& commented code for the task without additional munu
+        // let color = 50;
+        //let line = 20;
+        // let lineGrow = true;
+
+        let isDrawing = false;
+        let lastX;
+        let lastY;
+
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mousedown', () => {
+            isDrawing = true;
+            [lastX, lastY] = [event.offsetX, event.offsetY];
+        });
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+        function draw(event) {
+            if (!isDrawing) {
+                return;
+            } else {
+                ctx.strokeStyle;
+                ctx.lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(event.offsetX, event.offsetY);
+                ctx.stroke();
+                [lastX, lastY] = [event.offsetX, event.offsetY];
+            }
+
+            // &&&&& commented code for the task without additional munu
+            // color++;
+            // if (color >= 360) {
+            //     color = 0;
+            // }
+            // if (line > 80 || line < 1) {
+            //     lineGrow = !lineGrow;
+            // }
+
+            // if (lineGrow) {
+            //     line++;
+            // } else {
+            //     line--;
+            // }
+        }
+    </script>
+
+
+</body>
+
+</html>
