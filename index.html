@@ -72,7 +72,7 @@
         let lastX;
         let lastY;
 
-        canvas.addEventListener('mousemove', function () {
+        canvas.addEventListener('mousemove',  () => {
             if (!randomLine.checked && isDrawing) {
                 drawingByRules();
             } else if (randomLine.checked && isDrawing) {
