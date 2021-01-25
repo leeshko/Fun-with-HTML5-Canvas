@@ -54,15 +54,6 @@
         ctx.strokeStyle = "#ffc600";
 
         const position = document.querySelectorAll('.controls input');
-        position.forEach(input => input.addEventListener('change', visualUpdate));
-        position.forEach(input => input.addEventListener('mousemove', visualUpdate));
-
-
-
-        function visualUpdate() {
-            ctx.strokeStyle = this.value;
-            ctx.lineWidth = this.value;
-        }
 
         let color = 50;
         let line = 20;
@@ -72,11 +63,13 @@
         let lastX;
         let lastY;
 
-        canvas.addEventListener('mousemove',  () => {
-            if (!randomLine.checked && isDrawing) {
-                drawingByRules();
-            } else if (randomLine.checked && isDrawing) {
-                drawingRandom();
+        canvas.addEventListener('mousemove', () => {
+            if (isDrawing) {
+                if (randomLine.checked) {
+                    drawingRandom();
+                } else {
+                    drawingByRules();
+                }
             }
         });
 
@@ -89,14 +82,9 @@
 
 
         function drawingByRules() {
-            visualUpdate()
-            if (!isDrawing) {
-                return;
-            } else {
-                ctx.strokeStyle = lineColor.value;
-                ctx.lineWidth = lineSize.value;
-                makeLine();
-            }
+            ctx.strokeStyle = lineColor.value;
+            ctx.lineWidth = lineSize.value;
+            makeLine();
         }
 
         function drawingRandom() {
